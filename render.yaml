@@ -1,9 +1,11 @@
 services:
   - type: web
     name: practica-backend
-    runtime: image
+    runtime: node
     plan: free
-    dockerfilePath: ./dockerfile
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /api
     envVars:
       - key: DB_HOST
         value: mysql-299c61dd-leyplay14-6cb9.f.aivencloud.com
