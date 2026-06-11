@@ -8,6 +8,6 @@ export class Estudiante {
   @Column()
   nombre: string;
 
-  @Column()
+  @Column({ unique: true })
   codigo: string;
 }
