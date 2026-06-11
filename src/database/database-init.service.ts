@@ -17,17 +17,33 @@ export class DatabaseInitService implements OnModuleInit {
       return;
     }
 
-    const existingAdmin =
-      await this.usersService.findByUsername(adminUsername);
+    try {
+      const existingAdmin =
+        await this.usersService.findByUsername(adminUsername);
 
-    if (existingAdmin) {
-      return;
+      if (existingAdmin) {
+        return;
+      }
+
+      await this.usersService.createUser({
+        username: adminUsername,
+        password: adminPassword,
+        isAdmin: true,
+      });
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : String(error);
+
+      if (
+        typeof error === 'object' &&
+        error !== null &&
+        'code' in error &&
+        (error as { code?: string }).code === 'ER_NO_SUCH_TABLE'
+      ) {
+        return;
+      }
+
+      console.error('Error initializing admin user:', message);
     }
-
-    await this.usersService.createUser({
-      username: adminUsername,
-      password: adminPassword,
-      isAdmin: true,
-    });
   }
 }

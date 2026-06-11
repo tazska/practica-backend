@@ -1,0 +1,4 @@
+.env
+ca-cert.pem
+node_modules/
+dist/
